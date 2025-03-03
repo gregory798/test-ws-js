@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test WebSocket</title>
+</head>
+<body>
+  <h2>Test WebSocket sur GitHub Codespaces</h2>
+  <button onclick="sendMessage()">Envoyer un message</button>
+  <p id="status">🔴 Non connecté</p>
+  <p id="message"></p>
+
+  <script>
+    const socketUrl = "wss://reimagined-space-bassoon-g69gvv9r44x2r6-3000.app.github.dev"; // Change selon ton Codespace
+    const socket = new WebSocket(socketUrl);
+
+    socket.onopen = () => {
+      console.log("✅ Connecté au serveur WebSocket !");
+      document.getElementById("status").innerText = "🟢 Connecté";
+    };
+
+    socket.onmessage = (event) => {
+      console.log("📩 Message reçu :", event.data);
+      document.getElementById("message").innerText = `Réponse : ${event.data}`;
+    };
+
+    socket.onerror = (error) => {
+      console.error("❌ Erreur WebSocket :", error);
+    };
+
+    socket.onclose = () => {
+      console.log("❌ WebSocket fermé !");
+      document.getElementById("status").innerText = "🔴 Déconnecté";
+    };
+
+    function sendMessage() {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send("Hello WebSocket !");
+      } else {
+        alert("WebSocket non connecté !");
+      }
+    }
+  </script>
+</body>
+</html>
